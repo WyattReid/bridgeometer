@@ -1,2 +1,2 @@
-Bridgeometer
+bridgeometer
 ============
