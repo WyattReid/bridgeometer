@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+
+import subprocess
+
+BANDWIDTH_KBPS = 30000
+
+def speed_to_meter(speed):
+	
+	fraction = speed / BANDWIDTH_KBPS
+	return fraction
+
+if __name__ == '__main__':
+
+	command = ['ifstat','-i','br0','-n','-w','-b']
+
+	popen = subprocess.Popen(command, stdout=subprocess.PIPE)
+
+	for line in iter(popen.stdout.readline, ""):
+		line = line.strip(' '); line = line.strip('\n')
+		arr = line.split('      ')
+		try:
+			d_speed = float(arr[0])
+			u_speed = float(arr[1])
+		except ValueError as e:
+			print 'e: {0}'.format(arr[0])
+			continue
+		meter = speed_to_meter(d_speed)
+		print '{0} {1}'.format(d_speed,meter)
